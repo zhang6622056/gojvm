@@ -1,44 +1,39 @@
 package main
 
-
 import (
-	_ "os"
 	"flag"
-	"fmt"
 )
 
-type Cmd struct{
-	helpFlag	bool
-	versionFlag	bool
-	cpOption	string
-	class		string
-	args		[] string
+//定义类型
+type cmd struct{
+	help bool
+	version bool
+	classpath string
+	class string
+	args [] string
 }
 
 
+//返回值在后，加*
+func parseCmd() *cmd{
+	//创建结构体实例
+	cmd := &cmd{}
 
-func parseCmd()	  *Cmd{
-	cmd := &Cmd{}
-	flag.Usage = printUsage
-	flag.BoolVar(&cmd.helpFlag,"help",false,"print help message");
-	flag.BoolVar(&cmd.helpFlag,"?",false,"print help message");
-	flag.BoolVar(&cmd.versionFlag,"version",false,"print version and exit");
-	flag.StringVar(&cmd.cpOption,"classpath","","classpath");
-	flag.StringVar(&cmd.cpOption,"cp","","asspath");
+	//绑定命令行工具
+	flag.BoolVar(&cmd.help,"h",false,"")
+	flag.BoolVar(&cmd.version,"version",false,"1.0.0")
+	flag.StringVar(&cmd.classpath,"classpath","","the path of the classpath")
+	flag.StringVar(&cmd.class,"class","","the path of java file")
 	flag.Parse()
-	args := flag.Args()
-	if len(args) > 0 {
-		cmd.class = args[0]
-		cmd.args = args[1:]
-	}
+
 	return cmd
 }
 
 
+func main(){
+	cmd := parseCmd()
 
-func printUsage(){
-	fmt.Printf("Usage: ")
+	if cmd.help || cmd.class == ""{
+		flag.Usage()
+	}
 }
-
-
-
