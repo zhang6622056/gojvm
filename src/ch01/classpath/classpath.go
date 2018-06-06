@@ -1,26 +1,17 @@
 package classpath
 
 import (
-	"os"
 	"path/filepath"
-	"fmt"
+	"os"
 )
 
-type Classpath struct{
-	bootClassPath Entry
-	extClassPath Entry
-	userClassPath Entry
-}
+
 
 
 
 //读取class
-func (self *Classpath) ReadClass(className string) ([] byte,Entry ,error){
+func (self *Loadclass) ReadClass(className string) ([] byte,Entry ,error){
 	className = className + ".class"
-
-	fmt.Println("self.bootClassPath")
-	fmt.Println(self.bootClassPath)
-
 	if data,entry,err := self.bootClassPath.readClass(className); err == nil{
 		return data,entry,err
 	}
@@ -32,39 +23,31 @@ func (self *Classpath) ReadClass(className string) ([] byte,Entry ,error){
 
 
 
-//classpath 转换Entry对象
-func Parse(jreOption,cpOption string) *Classpath{
-	cp := &Classpath{}
-	fmt.Println("start....")
-	fmt.Println(cp)
 
+type Loadclass struct{
+	bootClassPath Entry
+	extClassPath Entry
+	userClassPath Entry
+}
+
+//classpath 转换Entry对象
+func Parse(jreOption,cpOption string) *Loadclass{
+	cp := &Loadclass{}
 	cp.parseBootAndExtClasspath(jreOption)
 	cp.parseUserClassPath(cpOption)
-
-	fmt.Println("end....")
-	fmt.Println(cp)
-
 	return cp
 }
 
-
 //转换bootClassPath和ExtClassPath
-func (self *Classpath) parseBootAndExtClasspath(jreOption string){
+func (self *Loadclass) parseBootAndExtClasspath(jreOption string){
 	jreDir := getJreDir(jreOption)
 	// jre/lib/*
 	jreLibPath := filepath.Join(jreDir,"lib","*")
 	self.bootClassPath = newWildCardEntry(jreLibPath)
+
 	//jre/lib/ext/*
 	jreExtPath := filepath.Join(jreDir,"lib","ext","*")
 	self.extClassPath = newWildCardEntry(jreExtPath)
-}
-
-//转换UserClassPath
-func (self *Classpath) parseUserClassPath(cpOption string){
-	if cpOption == ""{
-		cpOption = "."
-	}
-	self.userClassPath = newEntry(cpOption)
 }
 
 
@@ -83,6 +66,14 @@ func getJreDir(jreOption string) string{
 }
 
 
+//转换UserClassPath
+func (self *Loadclass) parseUserClassPath(cpOption string){
+	if cpOption == ""{
+		cpOption = "."
+	}
+	self.userClassPath = newEntry(cpOption)
+}
+
 //判断目录是否存在
 func exists(path string) bool{
 	if _,err := os.Stat(path) ; err != nil{
@@ -93,8 +84,9 @@ func exists(path string) bool{
 	return true
 }
 
+
 //如果没有设置用户classpath，那么默认读取当前路径
-func (self *Classpath) parseUserClasspath(cpOption string){
+func (self *Loadclass) parseUserClasspath(cpOption string){
 	if cpOption == ""{
 		cpOption = "."
 	}
@@ -102,7 +94,8 @@ func (self *Classpath) parseUserClasspath(cpOption string){
 }
 
 
-//输入classpath路径地址
-func (self *Classpath) String() string{
-	return self.userClassPath.String()
-}
+
+////输入classpath路径地址
+//func (self *Loadclass) String() string{
+//	return self.userClassPath.String()
+//}

@@ -47,10 +47,6 @@ func main(){
 func startJVM(cmd *cmd){
 	cp := classpath.Parse(cmd.XjreOption,cmd.classpath)
 
-	fmt.Println("cp")
-	fmt.Println(cp)
-
-
 	className := strings.Replace(cmd.class,".","/",-1)
 	classData,_,err := cp.ReadClass(className)
 	if err != nil{

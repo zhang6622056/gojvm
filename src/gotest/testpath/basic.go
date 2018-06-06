@@ -1,4 +1,4 @@
-package main
+package testpath
 
 import "fmt"
 
@@ -17,13 +17,7 @@ type Classpath struct{
 
 
 
-func b(){
+func Ba(){
 	a := &Classpath{}
 	fmt.Println(a)
-}
-
-
-
-func main(){
-	b()
 }
