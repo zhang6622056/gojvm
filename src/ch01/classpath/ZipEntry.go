@@ -5,6 +5,7 @@ import (
 	"archive/zip"
 	"io/ioutil"
 	"errors"
+	"fmt"
 )
 
 
@@ -26,6 +27,8 @@ func newZipEntry(path string) *ZipEntry {
 //从zip中读取class
 //defer 关键字
 func (self *ZipEntry) readClass(className string) ([] byte,Entry,error){
+	fmt.Println(className)
+
 	r,err := zip.OpenReader(self.absPath)
 	if err != nil{
 		return nil,nil,err

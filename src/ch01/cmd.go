@@ -2,6 +2,9 @@ package main
 
 import (
 	"flag"
+	"ch01/classpath"
+	"fmt"
+	"strings"
 )
 
 //定义类型
@@ -11,6 +14,7 @@ type cmd struct{
 	classpath string
 	class string
 	args [] string
+	XjreOption string
 }
 
 
@@ -24,6 +28,7 @@ func parseCmd() *cmd{
 	flag.BoolVar(&cmd.version,"version",false,"1.0.0")
 	flag.StringVar(&cmd.classpath,"classpath","","the path of the classpath")
 	flag.StringVar(&cmd.class,"class","","the path of java file")
+	flag.StringVar(&cmd.XjreOption,"Xjre","","the path of jre")
 	flag.Parse()
 
 	return cmd
@@ -32,8 +37,25 @@ func parseCmd() *cmd{
 
 func main(){
 	cmd := parseCmd()
+	startJVM(cmd)
+}
 
-	if cmd.help || cmd.class == ""{
-		flag.Usage()
+
+
+
+//启动jvm
+func startJVM(cmd *cmd){
+	cp := classpath.Parse(cmd.XjreOption,cmd.classpath)
+
+	fmt.Println("cp")
+	fmt.Println(cp)
+
+
+	className := strings.Replace(cmd.class,".","/",-1)
+	classData,_,err := cp.ReadClass(className)
+	if err != nil{
+		fmt.Printf("Could not find or load main class %s\n",cmd.class)
+		return
 	}
+	fmt.Printf("class data:%v\n",classData)
 }

@@ -15,6 +15,7 @@ func newDirEntry(path string) *DirEntry{
 	//转换绝对路径
 	absDir,err := filepath.Abs(path)
 	if err != nil{
+		//终止其后执行的code
 		panic(err)
 	}
 	//创建entry实例
