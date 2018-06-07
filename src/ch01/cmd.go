@@ -22,7 +22,6 @@ type cmd struct{
 func parseCmd() *cmd{
 	//创建结构体实例
 	cmd := &cmd{}
-
 	//绑定命令行工具
 	flag.BoolVar(&cmd.help,"h",false,"")
 	flag.BoolVar(&cmd.version,"version",false,"1.0.0")
@@ -30,7 +29,6 @@ func parseCmd() *cmd{
 	flag.StringVar(&cmd.class,"class","","the path of java file")
 	flag.StringVar(&cmd.XjreOption,"Xjre","","the path of jre")
 	flag.Parse()
-
 	return cmd
 }
 
